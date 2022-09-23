@@ -25,6 +25,7 @@
   --step-bg: black;
   --step-color: black;
   --right-container-bg: #fff;
+  --modal-bg: rgba(0,0,0,0.2);
 }
 
 :root[data-theme="dark"]{
@@ -49,4 +50,5 @@
   --step-bg:#333333;
   --step-color: #fff;
   --right-container-bg: #383838;
+  --modal-bg:rgba(255,255,255,0.2)
 }
