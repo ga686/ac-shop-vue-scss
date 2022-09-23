@@ -13,8 +13,13 @@ const routes = [
   },
   {
     path: '/',
+    name: 'shop',
+    component: shopView
+  },
+  {
+    path: '/',
     exact: true,
-    redirect: '/0'
+    redirect: '/'
   }
 ]
 

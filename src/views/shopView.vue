@@ -21,11 +21,11 @@
         <div class="main-container_btn-group mb-5">
           <hr class="my-5">
           <div class="d-flex justify-content-space-between">
-            <button class="btn btn--prev text-center" @click.stop.prevent = "btnPrev" :class="{'disabled': currentStatus === 0}">
-              <router-link :to="{name: 'shop', params: {id: currentStatus}}"><p class="m-0">上一步</p></router-link>
+            <button class="btn btn--prev text-center" @click = "btnPrev" :class="{'disabled': currentStatus === 0}">
+              <router-link :to="{name: 'shop', params: {id: currentStatus - 1}}"><p class="m-0">上一步</p></router-link>
             </button>
-            <button class="btn btn--next ml-auto text-center" @click.stop.prevent = "[btnNext(),formSubmit()]" :class="{'submit': submitBtnStatus === '確認下單'}">
-              <router-link :to="{name: 'shop', params: {id: currentStatus}}"><p class="m-0">{{submitBtnStatus}}</p></router-link>
+            <button class="btn btn--next ml-auto text-center" @click = "btnNext" :class="{'submit': submitBtnStatus === '確認下單'}">
+              <router-link :to="{name: 'shop', params: {id: currentStatus + 1}}"><p class="m-0" @click="formSubmit">{{submitBtnStatus}}</p></router-link>
             </button>
           </div>
         </div>
@@ -126,10 +126,10 @@ export default{
       }
       return this.submitInfo
     },
-    formSubmit (){
-      if(this.submitBtnStatus === "確認下單" &&  Object.keys(this.userInfo).length !== 0 && Object.keys(this.userCard).length !== 0){
+    formSubmit (e){
+      if(e.target.innerHTML === "確認下單" &&  Object.keys(this.userInfo).length !== 0 && Object.keys(this.userCard).length !== 0){
         this.showPopup = true
-      }else if(this.submitBtnStatus === "確認下單"){
+      }else if(e.target.innerHTML === "確認下單"){
         this.msg = "尚有欄位未填寫"
         this.showAlertMsg()
       }
@@ -153,6 +153,7 @@ export default{
         this.getCurrentFormId()
         this.readyToSubmit()
         localStorage.setItem('currentStatus',this.currentStatus)
+        this.$route.params.id = this.currentStatus
       }
     },
     userInfo: {
