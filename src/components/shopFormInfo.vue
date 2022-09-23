@@ -62,7 +62,7 @@ export default{
   methods: {
     fetchData(){
       console.log(localStorage.getItem('userInfo'))
-      if(JSON.parse(localStorage.getItem('userInfo')) === 0){
+      if(JSON.parse(localStorage.getItem('userInfo')) === null){
         return 
       }
       return this.userInfo = JSON.parse(localStorage.getItem('userInfo'))

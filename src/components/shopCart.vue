@@ -51,7 +51,7 @@ export default{
   }, 
   methods:{
     fetchData(){
-      if(JSON.parse(localStorage.getItem('products')) === 0){
+      if(JSON.parse(localStorage.getItem('products')) === null){
         return
       }
       return this.products = JSON.parse(localStorage.getItem('products'))

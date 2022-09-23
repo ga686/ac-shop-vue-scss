@@ -42,7 +42,7 @@ export default{
   },
   methods: {
     fetchData (){
-      if(JSON.parse(localStorage.getItem('userCard')) === 0){
+      if(JSON.parse(localStorage.getItem('userCard')) === null){
         return 
       }
       return this.userCard = JSON.parse(localStorage.getItem('userCard'))

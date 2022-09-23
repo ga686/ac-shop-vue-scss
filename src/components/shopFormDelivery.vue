@@ -39,7 +39,7 @@ export default{
   },
   methods:{
     fetchData(){
-      if(JSON.parse(localStorage.getItem('deliveryWays')) === 0){
+      if(JSON.parse(localStorage.getItem('deliveryWays')) === null){
         return 
       }
       return this.deliveryWays = JSON.parse(localStorage.getItem('deliveryWays'))
