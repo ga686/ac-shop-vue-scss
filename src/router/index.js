@@ -6,24 +6,15 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/:id',
     name: 'shop',
+    props: (route) => ({ id: route.params.id }),
     component: shopView
   },
   {
-    path: '/0',
-    name: 'shopInfo',
-    component: shopView
-  },
-  {
-    path: '/1',
-    name: 'shopDelivery',
-    component: shopView
-  },
-  {
-    path: '/2',
-    name: 'shopPayment',
-    component: shopView
+    path: '/',
+    exact: true,
+    redirect: '/0'
   }
 ]
 

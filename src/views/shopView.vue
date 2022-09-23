@@ -22,10 +22,10 @@
           <hr class="my-5">
           <div class="d-flex justify-content-space-between">
             <button class="btn btn--prev text-center" @click.stop.prevent = "btnPrev" :class="{'disabled': currentStatus === 0}">
-              <router-link :to="'/' + Number(currentStatus - 1)"><p class="m-0">上一步</p></router-link>
+              <router-link :to="{name: 'shop', params: {id: Number(currentStatus - 1)}}"><p class="m-0">上一步</p></router-link>
             </button>
             <button class="btn btn--next ml-auto text-center" @click.stop.prevent = "[btnNext(),formSubmit()]" :class="{'submit': submitBtnStatus === '確認下單'}">
-              <router-link :to="'/' + Number(formSubmitUrl () + 1)"><p class="m-0">{{submitBtnStatus}}</p></router-link>
+              <router-link :to="{name: 'shop', params: {id: Number(formSubmitUrl () + 1)}}"><p class="m-0">{{submitBtnStatus}}</p></router-link>
             </button>
           </div>
         </div>
@@ -172,6 +172,12 @@ export default{
         this.intergrateInfo()
       },
       deep: true
+    },
+    '$route.params.id': function (){
+      if(this.$route.params.id >= 0 && this.$route.params.id < 3){
+        localStorage.setItem('currentStatus',this.$route.params.id)
+        return this.currentStatus = parseInt(this.$route.params.id)
+      }
     }
   },
   created (){
