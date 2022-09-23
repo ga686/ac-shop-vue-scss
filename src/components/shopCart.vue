@@ -39,7 +39,7 @@ const data = {
 export default{
   data (){
     return {
-      products: [],
+      products: data.products,
       total: 0,
     }
   },
@@ -77,11 +77,15 @@ export default{
     products: {
       handler(){
         this.addUp()
+        localStorage.setItem('products',JSON.stringify(this.products))
       },
       deep:true
     },
     deliveryFee: function () {
       this.addUp()
+    },
+    total: function (){
+      this.$emit('return-total', this.total)
     }
   },
   filters:{
@@ -96,7 +100,7 @@ export default{
     }
   },
   created (){
-    return this.products = data.products
+    return this.products = JSON.parse(localStorage.getItem('products'))
   }
 }
 </script>

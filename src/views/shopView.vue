@@ -1,5 +1,5 @@
 <template>
-    <main>
+  <main>
     <div class="main-container px-3">
       <div class="container">
         <h1>結帳</h1>
@@ -8,23 +8,43 @@
         <div class="main-container_left my-5">
           <shopStatus :current-status="currentStatus"/>
           <div class="main-container_left_form">
-            <form>          
-              <shopFormInfo :current-status="currentStatus"/>  
+            <form method="post" id="cart-info">          
+              <shopFormInfo :current-status="currentStatus" @return-user-info="getReturnUserInfo"/>  
               <shopFormDelivery :current-status="currentStatus" @return-delivery-fee="getReturnDelivery"/>  
-              <shopFormPayment :current-status="currentStatus"/>     
+              <shopFormPayment :current-status="currentStatus" @return-user-card="getReturnUserCard"/>     
             </form>
           </div>
         </div>
         <div class="main-container_right">
-          <shopCart :delivery-fee="deliveryFee"/>
+          <shopCart :delivery-fee="deliveryFee" @return-total="getReturnTotal" />
         </div>
         <div class="main-container_btn-group mb-5">
           <hr class="my-5">
           <div class="d-flex justify-content-space-between">
-            <button class="btn btn--prev text-center" @click.stop.prevent = "btnPrev" :class="{'disabled': currentStatus === 0}"><p class="m-0">上一步</p></button>
-            <button class="btn btn--next ml-auto text-center" @click.stop.prevent = "btnNext" :class="{'submit': submitBtnStatus === '確認下單'}"><p class="m-0">{{submitBtnStatus}}</p></button>
+            <button class="btn btn--prev text-center" @click.stop.prevent = "btnPrev" :class="{'disabled': currentStatus === 0}">
+              <router-link :to="'/' + Number(currentStatus - 1)"><p class="m-0">上一步</p></router-link>
+            </button>
+            <button class="btn btn--next ml-auto text-center" @click.stop.prevent = "[btnNext(),formSubmit()]" :class="{'submit': submitBtnStatus === '確認下單'}">
+              <router-link :to="'/' + Number(formSubmitUrl () + 1)"><p class="m-0">{{submitBtnStatus}}</p></router-link>
+            </button>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="alert" v-if="showAlert" >{{msg}}</div>
+    <div class="user-info-modal" :class="{fade: !showPopup}"  @click="closePopUp">
+      <div class="modal-dialog">
+        <p>title: {{submitInfo.title}}</p>
+        <p>fullname: {{submitInfo.fullname}}</p>
+        <p>phone: {{submitInfo.phone}}</p>
+        <p>email: {{submitInfo.email}}</p>
+        <p>city: {{submitInfo.city}}</p>
+        <p>address: {{submitInfo.address}}</p>
+        <p>delivery fee: {{deliveryFee}}</p>
+        <p>holder: {{submitInfo.holder}}</p>
+        <p>card number: {{submitInfo.cardNum}}</p>
+        <p>expiration: {{submitInfo.expiration}}</p>
+        <p>cvc: {{submitInfo.cvc}}</p>
       </div>
     </div>
   </main>
@@ -42,7 +62,14 @@ export default{
     return {
       currentStatus: 0,
       deliveryFee: 0,
-      submitBtnStatus: "下一步"
+      submitBtnStatus: "下一步",
+      userInfo: [],
+      userCard: [],
+      submitInfo: [],
+      showAlert: false,
+      showPopup: false,
+      msg: "",
+      total: 0
     }
   },
   components: {
@@ -50,7 +77,7 @@ export default{
     shopStatus,
     shopFormInfo,
     shopFormDelivery,
-    shopFormPayment
+    shopFormPayment,
   },
   methods: {
     btnNext () {
@@ -67,7 +94,20 @@ export default{
       }
     },
     getReturnDelivery (fee){
+      localStorage.setItem("deliveryFee",fee)
       return this.deliveryFee = fee
+    },
+    getReturnUserInfo (info){
+      localStorage.setItem("userInfo",JSON.stringify(info))
+      return this.userInfo = info
+    },
+    getReturnUserCard (card){
+      localStorage.setItem("userCard",JSON.stringify(card))
+      return this.userCard = card
+    },
+    getReturnTotal (total){
+      localStorage.setItem("total",total)
+      return this.total = total
     },
     getCurrentFormId(){
       return this.currentFormId = this.currentStatus
@@ -77,15 +117,67 @@ export default{
         return this.submitBtnStatus = "確認下單" 
       }
       return this.submitBtnStatus = "下一步"
-    }
+    },
+    formSubmitUrl (){
+      if(this.currentStatus === 2){
+        return this.currentStatus - 1
+      }
+      return this.currentStatus
+    },
+    intergrateInfo (){ 
+      this.submitInfo = {
+        ...this.userInfo,
+        ...this.userCard,
+        ...this.deliveryFee,
+        ...this.total
+      }
+      return this.submitInfo
+    },
+    formSubmit (){
+      if(this.submitBtnStatus === "確認下單" &&  Object.keys(this.userInfo).length !== 0 && Object.keys(this.userCard).length !== 0){
+        this.showPopup = true
+      }else if(this.submitBtnStatus === "確認下單"){
+        this.msg = "尚有欄位未填寫"
+        this.showAlertMsg()
+      }
+    },
+    showAlertMsg (){
+      this.showAlert = true
+      const msgCounter = setTimeout(()=>{
+        clearTimeout(msgCounter)
+        return this.showAlert = false
+      },2500)
+    },
+    closePopUp (e){
+      if(e.target.matches('.user-info-modal')){
+        this.showPopup = false
+      }
+    },
   },
   watch: {
     currentStatus: {
       handler: function(){
         this.getCurrentFormId()
         this.readyToSubmit()
+        localStorage.setItem('currentStatus',this.currentStatus)
       }
+    },
+    userInfo: {
+      handler: function(){
+        this.intergrateInfo()
+      },
+      deep: true
+    },
+    userCard: {
+      handler: function(){
+        this.intergrateInfo()
+      },
+      deep: true
     }
   },
+  created (){
+    this.intergrateInfo ()
+    return this.currentStatus = JSON.parse(localStorage.getItem('currentStatus')) || 0
+  }
 }
 </script>

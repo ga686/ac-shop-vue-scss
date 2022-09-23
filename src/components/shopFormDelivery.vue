@@ -27,7 +27,7 @@ export default{
     return {
       formId: 1,
       showForm: false,
-      deliveryWays:[],
+      deliveryWays: data.deliveryWays,
       currentDeliveryFee: 0
     }
   },
@@ -54,6 +54,12 @@ export default{
   watch: {
     currentDeliveryFee: function (){
       this.$emit('return-delivery-fee', this.currentDeliveryFee);
+    },
+    deliveryWays: {
+      handler() {
+        localStorage.setItem('deliveryWays', JSON.stringify(this.deliveryWays))
+      },
+      deep: true
     }
   },
   computed:{
@@ -65,7 +71,7 @@ export default{
     }
   },
   created (){
-    return this.deliveryWays = data.deliveryWays
+    return this.deliveryWays = JSON.parse(localStorage.getItem('deliveryWays'))
   }
 }
 </script>

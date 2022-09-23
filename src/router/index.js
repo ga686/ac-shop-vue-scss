@@ -10,6 +10,21 @@ const routes = [
     name: 'shop',
     component: shopView
   },
+  {
+    path: '/0',
+    name: 'shopInfo',
+    component: shopView
+  },
+  {
+    path: '/1',
+    name: 'shopDelivery',
+    component: shopView
+  },
+  {
+    path: '/2',
+    name: 'shopPayment',
+    component: shopView
+  }
 ]
 
 const router = new VueRouter({
