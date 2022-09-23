@@ -65,7 +65,8 @@ export default{
     }
   },
   created (){
-    return this.fetchData()
+    this.fetchData()
+    console.log(this.userCard)
   }
 }
 </script>

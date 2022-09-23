@@ -94,7 +94,6 @@ export default{
       }
     },
     getReturnDelivery (fee){
-      localStorage.setItem("deliveryFee",fee)
       return this.deliveryFee = fee
     },
     getReturnUserInfo (info){

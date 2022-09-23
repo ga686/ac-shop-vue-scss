@@ -88,6 +88,7 @@ export default{
       deep:true
     },
     deliveryFee: function () {
+      localStorage.setItem('deliveryFee',JSON.stringify(this.deliveryFee))
       this.addUp()
     },
     total: function (){

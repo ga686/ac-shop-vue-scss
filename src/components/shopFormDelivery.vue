@@ -44,6 +44,12 @@ export default{
       }
       return this.deliveryWays = JSON.parse(localStorage.getItem('deliveryWays'))
     },
+    fetchDeliveryFee(){
+      if(JSON.parse(localStorage.getItem('deliveryFee')) === null){
+        return 
+      }
+      return this.currentDeliveryFee = JSON.parse(localStorage.getItem('deliveryFee'))
+    },
     getSelected (id){
       this.deliveryWays.filter((delivery) => {
         delivery.id === id ? delivery.ischecked = true : delivery.ischecked = false   
@@ -59,6 +65,7 @@ export default{
   },
   watch: {
     currentDeliveryFee: function (){
+      localStorage.setItem("deliveryFee", JSON.stringify(this.currentDeliveryFee))
       this.$emit('return-delivery-fee', this.currentDeliveryFee);
     },
     deliveryWays: {
@@ -78,6 +85,7 @@ export default{
   },
   created (){
     this.fetchData()
+    this.fetchDeliveryFee()
   }
 }
 </script>
