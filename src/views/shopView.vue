@@ -22,10 +22,10 @@
           <hr class="my-5">
           <div class="d-flex justify-content-space-between">
             <button class="btn btn--prev text-center" @click.stop.prevent = "btnPrev" :class="{'disabled': currentStatus === 0}">
-              <router-link :to="{name: 'shop', params: {id: Number(currentStatus - 1)}}"><p class="m-0">上一步</p></router-link>
+              <router-link :to="{name: 'shop', params: {id: currentStatus}}"><p class="m-0">上一步</p></router-link>
             </button>
             <button class="btn btn--next ml-auto text-center" @click.stop.prevent = "[btnNext(),formSubmit()]" :class="{'submit': submitBtnStatus === '確認下單'}">
-              <router-link :to="{name: 'shop', params: {id: Number(formSubmitUrl () + 1)}}"><p class="m-0">{{submitBtnStatus}}</p></router-link>
+              <router-link :to="{name: 'shop', params: {id: currentStatus}}"><p class="m-0">{{submitBtnStatus}}</p></router-link>
             </button>
           </div>
         </div>
@@ -116,12 +116,6 @@ export default{
         return this.submitBtnStatus = "確認下單" 
       }
       return this.submitBtnStatus = "下一步"
-    },
-    formSubmitUrl (){
-      if(this.currentStatus === 2){
-        return this.currentStatus - 1
-      }
-      return this.currentStatus
     },
     intergrateInfo (){ 
       this.submitInfo = {
