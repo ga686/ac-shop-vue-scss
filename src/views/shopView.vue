@@ -22,7 +22,7 @@
           <hr class="my-5">
           <div class="d-flex justify-content-space-between">
             <button class="btn btn--prev text-center" @click = "btnPrev" :class="{'disabled': currentStatus === 0}">
-              <router-link :to="{name: 'shop', params: {id: currentStatus - 1}}"><p class="m-0">上一步</p></router-link>
+              <router-link :to="{name: 'shop', params: {id: currentStatus}}"><p class="m-0">上一步</p></router-link>
             </button>
             <button class="btn btn--next ml-auto text-center" @click = "btnNext" :class="{'submit': submitBtnStatus === '確認下單'}">
               <router-link :to="{name: 'shop', params: {id: currentStatus + 1}}"><p class="m-0" @click="formSubmit">{{submitBtnStatus}}</p></router-link>
@@ -171,6 +171,7 @@ export default{
     },
     '$route.params.id': function (){
       if(this.$route.params.id >= 0 && this.$route.params.id < 3){
+        console.log(this.currentStatus)
         localStorage.setItem('currentStatus',this.$route.params.id)
         return this.currentStatus = parseInt(this.$route.params.id)
       }
