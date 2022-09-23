@@ -15,7 +15,7 @@
   </section>  
 </template>
 <script>
-const data = {
+const dummyData = {
   "deliveryWays":[
     {"title": '標準運送',"fee": 0, "desc": '約3~7個工作天',"id": "standard","ischecked": true,"name":"delivery"},
     {"title": 'DHL貨運',"fee": 500, "desc": '48小時內送達',"id": "dhl", "ischecked": false,"name":"delivery"}
@@ -27,7 +27,7 @@ export default{
     return {
       formId: 1,
       showForm: false,
-      deliveryWays: data.deliveryWays,
+      deliveryWays: dummyData.deliveryWays,
       currentDeliveryFee: 0
     }
   },
@@ -38,6 +38,12 @@ export default{
     }
   },
   methods:{
+    fetchData(){
+      if(JSON.parse(localStorage.getItem('deliveryWays')) === 0){
+        return 
+      }
+      return this.deliveryWays = JSON.parse(localStorage.getItem('deliveryWays'))
+    },
     getSelected (id){
       this.deliveryWays.filter((delivery) => {
         delivery.id === id ? delivery.ischecked = true : delivery.ischecked = false   
@@ -71,7 +77,7 @@ export default{
     }
   },
   created (){
-    return this.deliveryWays = JSON.parse(localStorage.getItem('deliveryWays'))
+    this.fetchData()
   }
 }
 </script>

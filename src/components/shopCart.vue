@@ -29,7 +29,7 @@
 </template>
 <script>
 
-const data = {
+const dummyData = {
   "products":[
     {"name":"破壞補丁修身牛仔褲","image":"https://drive.google.com/uc?export=view&id=1Zagx-DqfjEbRL7Wxdz62bzdNxPGpGJd5","price":3999,"qty":1,"id":1},
     {"name":"刷色直筒牛仔褲","image":"https://drive.google.com/uc?export=view&id=1wayAz_6XP7dFe1fkfLtyogoa-BtZGlox","price":1299,"qty":1,"id":2}
@@ -39,7 +39,7 @@ const data = {
 export default{
   data (){
     return {
-      products: data.products,
+      products: dummyData.products,
       total: 0,
     }
   },
@@ -50,6 +50,12 @@ export default{
     }
   }, 
   methods:{
+    fetchData(){
+      if(JSON.parse(localStorage.getItem('products')) === 0){
+        return
+      }
+      return this.products = JSON.parse(localStorage.getItem('products'))
+    },
     addQtyBtn (id){
       this.products.filter((product) => {
         if(product.id ===id){
@@ -100,7 +106,7 @@ export default{
     }
   },
   created (){
-    return this.products = JSON.parse(localStorage.getItem('products'))
+    this.fetchData()
   }
 }
 </script>

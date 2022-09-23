@@ -44,19 +44,13 @@
   </section>
 </template>
 <script>
+
 export default{
   data () {
     return {
       formId: 0,
       showForm: false,
-      userInfo: {
-        title: "",
-        fullname: "",
-        phone: "",
-        email: "",
-        city: "",
-        address: "",
-      }
+      userInfo: {title: "",fullname: "",phone: "",email: "",city: "",address: ""}
     }
   },
   props: {
@@ -64,6 +58,16 @@ export default{
       type: Number,
       required: true
     }
+  },
+  methods: {
+    fetchData(){
+      console.log(localStorage.getItem('userInfo'))
+      if(JSON.parse(localStorage.getItem('userInfo')) === 0){
+        return 
+      }
+      return this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+    },
   },
   watch: {
     userInfo:{
@@ -82,7 +86,7 @@ export default{
     }
   },
   created (){
-    return this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    this.fetchData()
   }
 }
 </script>

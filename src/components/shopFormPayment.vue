@@ -31,12 +31,7 @@ export default{
   data () {
     return {
       formId: 2,
-      userCard:{
-        holder: "",
-        cardNum: "",
-        expiration: "",
-        cvc: ""
-      }
+      userCard: { holder: "", cardNum: "", expiration: "",cvc: ""}
     }
   },
   props: {
@@ -44,6 +39,14 @@ export default{
       type: Number,
       required: true
     }
+  },
+  methods: {
+    fetchData (){
+      if(JSON.parse(localStorage.getItem('userCard')) === 0){
+        return 
+      }
+      return this.userCard = JSON.parse(localStorage.getItem('userCard'))
+    },
   },
   watch: {
     userCard:{
@@ -62,7 +65,7 @@ export default{
     }
   },
   created (){
-    return this.userCard = JSON.parse(localStorage.getItem('userCard'))
+    return this.fetchData()
   }
 }
 </script>
