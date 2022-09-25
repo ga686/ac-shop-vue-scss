@@ -133,9 +133,7 @@ export default{
       if(e.target.parentNode.matches('.url-next')){
         this.currentStatus < 3 ? this.currentStatus = this.currentStatus + 1 : this.currentStatus = 2
       }else if(e.target.parentNode.matches('.url-prev')){
-        console.log(this.currentStatus)
         this.currentStatus > 0 ? this.currentStatus = this.$route.params.id : this.currentStatus = 0
-        console.log(this.currentStatus)
       }
     },
     handleUrlPrev(num){
