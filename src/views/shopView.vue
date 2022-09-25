@@ -20,12 +20,12 @@
         </div>
         <div class="main-container_btn-group mb-5">
           <hr class="my-5">
-          <div class="d-flex justify-content-space-between">
-            <button class="btn btn--prev text-center" @click = "btnPrev" :class="{'disabled': currentStatus === 0}">
-              <router-link :to="{name: 'shop', params: {id: currentStatus}}"><p class="m-0">上一步</p></router-link>
+          <div class="d-flex justify-content-space-between" @click="formStatusBtn">
+            <button class="btn btn--prev text-center" :class="{'disabled': currentStatus === 0}">
+              <router-link :to="{name: 'shop', params: {id: handleUrl(currentStatus - 1)}}" class="url-prev"><p class="m-0">上一步</p></router-link>
             </button>
-            <button class="btn btn--next ml-auto text-center" @click = "btnNext" :class="{'submit': submitBtnStatus === '確認下單'}">
-              <router-link :to="{name: 'shop', params: {id: currentStatus + 1}}"><p class="m-0" @click="formSubmit">{{submitBtnStatus}}</p></router-link>
+            <button class="btn btn--next ml-auto text-center" :class="{'submit': submitBtnStatus === '確認下單'}">
+              <router-link :to="{name: 'shop', params: {id: currentStatus}}" class="url-next"><p class="m-0" @click="formSubmit">{{submitBtnStatus}}</p></router-link>
             </button>
           </div>
         </div>
@@ -80,20 +80,6 @@ export default{
     shopFormPayment,
   },
   methods: {
-    btnNext () {
-      if (this.currentStatus < 2){
-        return this.currentStatus = this.currentStatus + 1
-      }
-      return this.currentStatus = 2
-    },
-    btnPrev () {
-      console.log(this.currentStatus)
-      if (this.currentStatus > 0){
-        return this.currentStatus = this.currentStatus - 1
-      }else{
-        return this.currentStatus = 0
-      }
-    },
     getReturnDelivery (fee){
       return this.deliveryFee = fee
     },
@@ -147,6 +133,19 @@ export default{
         this.showPopup = false
       }
     },
+    formStatusBtn (e){
+      if(e.target.parentNode.matches('.url-next')){
+        this.currentStatus < 3 ? this.currentStatus = this.currentStatus + 1 : this.currentStatus = 2
+      }else if(e.target.parentNode.matches('.url-prev')){
+        this.currentStatus > 0 ? this.currentStatus = this.currentStatus - 1 : this.currentStatus = 0
+      }
+    },
+    handleUrl(num){
+      if( num === 0){
+        return 0
+      }
+      return this.currentStatus - 1
+    }
   },
   watch: {
     currentStatus: {
@@ -154,6 +153,9 @@ export default{
         this.getCurrentFormId()
         this.readyToSubmit()
         localStorage.setItem('currentStatus',this.currentStatus)
+        if(this.currentStatus === 3){
+          this.currentStatus = 2
+        }
         return this.$route.params.id = this.currentStatus
       }
     },
@@ -170,12 +172,9 @@ export default{
       deep: true
     },
     '$route.params.id': function (){
-      if(this.$route.params.id >= 0 && this.$route.params.id < 3){
-        console.log(this.currentStatus)
-        localStorage.setItem('currentStatus',this.$route.params.id)
-        return this.currentStatus = parseInt(this.$route.params.id)
-      }
-    }
+      localStorage.setItem('currentStatus',parseInt(this.$route.params.id))
+      return this.currentStatus = JSON.parse(localStorage.getItem('currentStatus'))
+    },
   },
   created (){
     this.intergrateInfo ()
