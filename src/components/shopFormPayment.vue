@@ -16,7 +16,11 @@
     <div class="main-container_left_form_group--cardnum">
       <div class="main-container_left_form_group_item">
         <label for="expiration">有效期限</label>
-        <input type="date" id="expiration" placeholder="MM/YY" v-model="userCard.expiration" required>
+        <span class="expiration-input">
+          <input type="text" name="month" placeholder="MM" v-model="userCard.expiration.month" maxlength="2" size="2" />
+          <span>/</span>
+          <input type="text" name="year" placeholder="YYYY" v-model="userCard.expiration.year" maxlength="4" size="2" />
+        </span>
       </div>
       <div class="main-container_left_form_group_item">
         <label for="cvc">CVC/CCV</label>
@@ -31,7 +35,15 @@ export default{
   data () {
     return {
       formId: 2,
-      userCard: { holder: "", cardNum: "", expiration: "",cvc: ""}
+      userCard: { 
+        holder: "", 
+        cardNum: "", 
+        expiration: {
+          month: "09",
+          year: "2024"
+        },
+        cvc: ""
+      }
     }
   },
   props: {
@@ -66,7 +78,6 @@ export default{
   },
   created (){
     this.fetchData()
-    console.log(this.userCard)
   }
 }
 </script>

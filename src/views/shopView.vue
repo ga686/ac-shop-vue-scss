@@ -34,17 +34,17 @@
     <div class="alert" v-if="showAlert" >{{msg}}</div>
     <div class="user-info-modal" :class="{fade: !showPopup}"  @click="closePopUp">
       <div class="modal-dialog">
-        <p>title: {{submitInfo.title}}</p>
-        <p>fullname: {{submitInfo.fullname}}</p>
-        <p>phone: {{submitInfo.phone}}</p>
-        <p>email: {{submitInfo.email}}</p>
-        <p>city: {{submitInfo.city}}</p>
-        <p>address: {{submitInfo.address}}</p>
+        <p>title: {{userInfo.title}}</p>
+        <p>fullname: {{userInfo.fullname}}</p>
+        <p>phone: {{userInfo.phone}}</p>
+        <p>email: {{userInfo.email}}</p>
+        <p>city: {{userInfo.city}}</p>
+        <p>address: {{userInfo.address}}</p>
         <p>delivery fee: {{deliveryFee}}</p>
-        <p>holder: {{submitInfo.holder}}</p>
-        <p>card number: {{submitInfo.cardNum}}</p>
-        <p>expiration: {{submitInfo.expiration}}</p>
-        <p>cvc: {{submitInfo.cvc}}</p>
+        <p>holder: {{userCard.holder}}</p>
+        <p>card number: {{userCard.cardNum}}</p>
+        <p>expiration: {{userCard.expiration.month}}-{{userCard.expiration.year}}</p>
+        <p>cvc: {{userCard.cvc}}</p>
       </div>
     </div>
   </main>
@@ -64,7 +64,12 @@ export default{
       deliveryFee: 0,
       submitBtnStatus: "下一步",
       userInfo: [],
-      userCard: [],
+      userCard: {
+        expiration: {
+          month: '09',
+          year: '24'
+        }
+      },
       submitInfo: [],
       showAlert: false,
       showPopup: false,
@@ -103,15 +108,6 @@ export default{
         return this.submitBtnStatus = "確認下單" 
       }
       return this.submitBtnStatus = "下一步"
-    },
-    intergrateInfo (){ 
-      this.submitInfo = {
-        ...this.userInfo,
-        ...this.userCard,
-        ...this.deliveryFee,
-        ...this.total
-      }
-      return this.submitInfo
     },
     formSubmit (e){
       if(e.target.innerHTML === "確認下單" &&  Object.keys(this.userInfo).length !== 0 && Object.keys(this.userCard).length !== 0){
@@ -159,25 +155,12 @@ export default{
         return this.$route.params.id = this.currentStatus
       }
     },
-    userInfo: {
-      handler: function(){
-        this.intergrateInfo()
-      },
-      deep: true
-    },
-    userCard: {
-      handler: function(){
-        this.intergrateInfo()
-      },
-      deep: true
-    },
     '$route.params.id': function (){
       localStorage.setItem('currentStatus',parseInt(this.$route.params.id))
       return this.currentStatus = JSON.parse(localStorage.getItem('currentStatus'))
     },
   },
   created (){
-    this.intergrateInfo ()
     return this.currentStatus = JSON.parse(localStorage.getItem('currentStatus')) || 0
   }
 }

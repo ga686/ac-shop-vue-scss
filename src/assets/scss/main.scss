@@ -308,6 +308,19 @@
               color: var(--placeholder-color);
             }
           }
+          .expiration-input{
+            @extend %input-style;
+            input{
+              border: 0;
+              padding: 0;
+              &[name="month"]{
+                width: 25px;
+              }
+              &[name="year"]{
+                width: 50px;
+              }
+            }
+          }
           label{
             font-size: 12px;
             font-weight: bold;
