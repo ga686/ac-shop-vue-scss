@@ -22,10 +22,10 @@
           <hr class="my-5">
           <div class="d-flex justify-content-space-between" @click="formStatusBtn">
             <button class="btn btn--prev text-center" :class="{'disabled': currentStatus === 0}">
-              <router-link :to="{name: 'shop', params: {id: handleUrlPrev(currentStatus)}}" class="url-prev"><p class="m-0">上一步</p></router-link>
+              <router-link :to="{name: 'shop', params: {id: currentStatus - 1}}" class="url-prev"><p class="m-0">上一步</p></router-link>
             </button>
             <button class="btn btn--next ml-auto text-center" :class="{'submit': submitBtnStatus === '確認下單'}">
-              <router-link :to="{name: 'shop', params: {id: handleUrlNext(currentStatus)}}" class="url-next"><p class="m-0" @click="formSubmit">{{submitBtnStatus}}</p></router-link>
+              <router-link :to="{name: 'shop', params: {id: currentStatus + 1}}" class="url-next"><p class="m-0" @click="formSubmit">{{submitBtnStatus}}</p></router-link>
             </button>
           </div>
         </div>
@@ -136,18 +136,16 @@ export default{
         this.currentStatus > 0 ? this.currentStatus = this.$route.params.id : this.currentStatus = 0
       }
     },
-    handleUrlPrev(num){
-      if( num === 0){
-        return 0
-      }
-      return num - 1
-    },
-    handleUrlNext(num){
-      if( num === 0){
-        return 1
-      }
-      return num 
+  },
+  beforeRouteUpdate (to, from, next) {
+    if(parseInt(to.params.id) < 0){
+      this.$router.push({ name: 'shop', params: { id: 0 } })
+    }else if(parseInt(to.params.id) > 2){
+      this.$router.push({ name: 'shop', params: { id: 2 } })
     }
+    localStorage.setItem('currentStatus',parseInt(to.params.id))
+    this.currentStatus = parseInt(localStorage.getItem('currentStatus'))
+    next()
   },
   watch: {
     currentStatus: {
@@ -160,10 +158,6 @@ export default{
         }
         return this.$route.params.id = this.currentStatus
       }
-    },
-    '$route.params.id': function (){
-      localStorage.setItem('currentStatus',parseInt(this.$route.params.id))
-      return this.currentStatus = JSON.parse(localStorage.getItem('currentStatus'))
     },
   },
   created (){
